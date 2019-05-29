@@ -21,7 +21,7 @@ public class SongFiller implements Filler<Song> {
 
         StringBuilder html = response.asHtmlPage();
 
-        Song song = new Song(url, response.asHtmlPage());
+        Song song = new Song(url, html);
 
         Grabber<String> titleGrabber = new RegexSingleValueGrabber(RegexLibrary.SONG_TITLE_REGEX, 1);
         String title = titleGrabber.grab(html);

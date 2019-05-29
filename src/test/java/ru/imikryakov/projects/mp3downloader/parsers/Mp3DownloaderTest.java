@@ -1,6 +1,7 @@
 package ru.imikryakov.projects.mp3downloader.parsers;
 
 import org.junit.Test;
+import ru.imikryakov.projects.mp3downloader.Downloader;
 import ru.imikryakov.projects.mp3downloader.SearchEngine;
 import ru.imikryakov.projects.mp3downloader.UrlConstructor;
 import ru.imikryakov.projects.mp3downloader.data.Album;
@@ -60,5 +61,12 @@ public class Mp3DownloaderTest {
     public void testArtistSearch() {
         Search search = SearchEngine.searchArtist("john denver");
         assertNotNull(search);
+    }
+
+    @Test
+    public void testDownloadAlbum() {
+        Album album = new AlbumFiller().fill(TestData.getAlbumPageRelativeUrl());
+        assertNotNull(album);
+        Downloader.downloadAlbum(album, "");
     }
 }

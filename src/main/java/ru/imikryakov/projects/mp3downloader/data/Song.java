@@ -1,5 +1,7 @@
 package ru.imikryakov.projects.mp3downloader.data;
 
+import ru.imikryakov.projects.mp3downloader.UrlConstructor;
+
 public class Song extends HtmlEntity implements Downloadable {
     private String artistName;
     private String albumName;
@@ -18,7 +20,7 @@ public class Song extends HtmlEntity implements Downloadable {
 
     @Override
     public String getDownloadLink() {
-        return downloadLink;
+        return UrlConstructor.getSongDownloadUrl(downloadLink);
     }
 
     public String getArtistName() {
