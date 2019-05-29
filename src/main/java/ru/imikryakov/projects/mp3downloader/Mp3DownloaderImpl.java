@@ -2,16 +2,41 @@ package ru.imikryakov.projects.mp3downloader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.imikryakov.projects.mp3downloader.data.Album;
-import ru.imikryakov.projects.mp3downloader.data.Song;
-import ru.imikryakov.projects.mp3downloader.parsers.SongFiller;
+import ru.imikryakov.projects.mp3downloader.api.*;
+import ru.imikryakov.projects.mp3downloader.parsers.*;
 
 import java.io.File;
 
-public class Downloader {
-    private static Logger logger = LoggerFactory.getLogger(Downloader.class);
+public class Mp3DownloaderImpl implements Mp3Downloader {
+    private static Logger logger = LoggerFactory.getLogger(Mp3DownloaderImpl.class);
 
-    public static void downloadAlbum(Album album, String parentDir) {
+    private Filler<Album> albumFiller = new AlbumFiller();
+    private Filler<Artist> artistFiller = new ArtistFiller();
+    private Filler<Song> songFiller = new SongFiller();
+    private Filler<Search> artistSearchFiller = new ArtistSearchFiller();
+
+    @Override
+    public Search searchArtist(String query) {
+        return artistSearchFiller.fill(query);
+    }
+
+    @Override
+    public Artist getArtist(String relativeUrl) {
+        return artistFiller.fill(relativeUrl);
+    }
+
+    @Override
+    public Album getAlbum(String relativeUrl) {
+        return albumFiller.fill(relativeUrl);
+    }
+
+    @Override
+    public Song getSong(String relativeUrl) {
+        return songFiller.fill(relativeUrl);
+    }
+
+    @Override
+    public void downloadAlbum(Album album, String parentDir) {
         String folderName = String.format("%s %s - %s", album.getArtistName(), album.getYear() == 0 ? "" : " - (" + album.getYear() + ")", album.getTitle());
 
         File albumDir;

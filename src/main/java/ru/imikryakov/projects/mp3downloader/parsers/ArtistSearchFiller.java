@@ -2,7 +2,8 @@ package ru.imikryakov.projects.mp3downloader.parsers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.imikryakov.projects.mp3downloader.data.Search;
+import ru.imikryakov.projects.mp3downloader.api.Search;
+import ru.imikryakov.projects.mp3downloader.data.SearchImpl;
 import ru.imikryakov.projects.mp3downloader.http.HttpClientManager;
 import ru.imikryakov.projects.mp3downloader.http.HttpResponse;
 
@@ -23,7 +24,7 @@ public class ArtistSearchFiller implements Filler<Search> {
 
         StringBuilder html = response.asHtmlPage();
 
-        Search search = new Search(url, html);
+        SearchImpl search = new SearchImpl(url, html);
 
         Grabber<Collection<String>> artistsNamesGrabber = new RegexMultiValueGrabber(RegexLibrary.SEARCH_ARTISTS_REGEX, 2);
         Grabber<Collection<String>> artistsUrlsGrabber = new RegexMultiValueGrabber(RegexLibrary.SEARCH_ARTISTS_REGEX, 1);

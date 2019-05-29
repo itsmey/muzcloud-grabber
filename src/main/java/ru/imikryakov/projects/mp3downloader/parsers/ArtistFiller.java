@@ -3,7 +3,8 @@ package ru.imikryakov.projects.mp3downloader.parsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.imikryakov.projects.mp3downloader.UrlConstructor;
-import ru.imikryakov.projects.mp3downloader.data.Artist;
+import ru.imikryakov.projects.mp3downloader.api.Artist;
+import ru.imikryakov.projects.mp3downloader.data.ArtistImpl;
 import ru.imikryakov.projects.mp3downloader.http.HttpClientManager;
 import ru.imikryakov.projects.mp3downloader.http.HttpResponse;
 
@@ -25,7 +26,7 @@ public class ArtistFiller implements Filler<Artist> {
 
         StringBuilder html = response.asHtmlPage();
 
-        Artist artist = new Artist(url, html);
+        ArtistImpl artist = new ArtistImpl(url, html);
 
         Grabber<String> titleGrabber = new RegexSingleValueGrabber(RegexLibrary.ARTIST_TITLE_REGEX, 1);
         String title = titleGrabber.grab(html);

@@ -8,13 +8,15 @@ public class TestData {
     private static HashMap<String, String> artistRelativePaths = new HashMap<>();
     private static HashMap<String, String> albumsRelativePaths = new HashMap<>();
     private static HashMap<String, String> songsRelativePaths = new HashMap<>();
-    private static HashMap<String, String> songsDownloadRelativeLinks = new HashMap<>();
 
     static {
         artistRelativePaths.put("Sparks", "/artist/115732/sparks");
         albumsRelativePaths.put("Sparks (Halfnelson)", "/album/250357/sparks-sparks-halfnelson-1971");
         songsRelativePaths.put("Wonder Girl", "/song/3574620/sparks-wonder-girl");
-        songsDownloadRelativeLinks.put("Wonder Girl", "/song/dl/636947189271877677/488760153c30276c9f085d0258ccb1f8/3574620");
+        /*
+         * Внимание! Поскольку ссылки на скачивания песни непостоянны, они отсюда удалены. Для получения актуально ссылки на скачивание
+         * песни нужно иметь ссылку на страницу песни и оттуда уже извлечь ссылку на фаил песни
+         */
     }
 
     public static String getArtistPageRelativeUrl() {
@@ -42,14 +44,5 @@ public class TestData {
     public static String getSongPageUrl() {
         String relativePath = songsRelativePaths.values().iterator().next();
         return UrlConstructor.getSongPageUrl(relativePath);
-    }
-
-    public static String getSongDownloadRelativeLink() {
-        return songsDownloadRelativeLinks.values().iterator().next();
-    }
-
-    public static String getSongDownloadLink() {
-        String relativePath = songsDownloadRelativeLinks.values().iterator().next();
-        return UrlConstructor.getSongDownloadUrl(relativePath);
     }
 }

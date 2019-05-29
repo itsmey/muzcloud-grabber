@@ -1,17 +1,19 @@
 package ru.imikryakov.projects.mp3downloader.data;
 
+import ru.imikryakov.projects.mp3downloader.api.Album;
+
 import java.util.Collection;
 
-public class Album extends HtmlEntity {
+public class AlbumImpl extends HtmlEntity implements Album {
     private String artistName;
     private int year;
     private String type;
     private int bitrate;
     private byte[] photo;
-    private Collection<Song> songs;
+    private Collection<SongImpl> songs;
     private Collection<String> songUrls;
 
-    public Album(String url, CharSequence htmlPage) {
+    public AlbumImpl(String url, CharSequence htmlPage) {
         super(url, htmlPage);
     }
 
@@ -55,11 +57,11 @@ public class Album extends HtmlEntity {
         this.photo = photo;
     }
 
-    public Collection<Song> getSongs() {
+    public Collection<SongImpl> getSongs() {
         return songs;
     }
 
-    public void setSongs(Collection<Song> songs) {
+    public void setSongs(Collection<SongImpl> songs) {
         this.songs = songs;
     }
 

@@ -3,7 +3,8 @@ package ru.imikryakov.projects.mp3downloader.parsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.imikryakov.projects.mp3downloader.UrlConstructor;
-import ru.imikryakov.projects.mp3downloader.data.Album;
+import ru.imikryakov.projects.mp3downloader.api.Album;
+import ru.imikryakov.projects.mp3downloader.data.AlbumImpl;
 import ru.imikryakov.projects.mp3downloader.http.HttpClientManager;
 import ru.imikryakov.projects.mp3downloader.http.HttpResponse;
 
@@ -25,7 +26,7 @@ public class AlbumFiller implements Filler<Album> {
 
         StringBuilder html = response.asHtmlPage();
 
-        Album album = new Album(url, html);
+        AlbumImpl album = new AlbumImpl(url, html);
 
         Grabber<String> titleGrabber = new RegexSingleValueGrabber(RegexLibrary.ALBUM_TITLE_REGEX, 1);
         String title = titleGrabber.grab(html);

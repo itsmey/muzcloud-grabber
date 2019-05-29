@@ -1,8 +1,9 @@
 package ru.imikryakov.projects.mp3downloader.data;
 
 import ru.imikryakov.projects.mp3downloader.UrlConstructor;
+import ru.imikryakov.projects.mp3downloader.api.Song;
 
-public class Song extends HtmlEntity implements Downloadable {
+public class SongImpl extends HtmlEntity implements Song {
     private String artistName;
     private String albumName;
     private String length;
@@ -10,7 +11,7 @@ public class Song extends HtmlEntity implements Downloadable {
     private int bitrate;
     private String downloadLink;
 
-    public Song(String url, CharSequence htmlPage) {
+    public SongImpl(String url, CharSequence htmlPage) {
         super(url, htmlPage);
     }
 

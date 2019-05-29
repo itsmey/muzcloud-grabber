@@ -1,11 +1,13 @@
 package ru.imikryakov.projects.mp3downloader.data;
 
+import ru.imikryakov.projects.mp3downloader.api.Search;
+
 import java.util.HashMap;
 
-public class Search extends HtmlEntity {
+public class SearchImpl extends HtmlEntity implements Search {
     private HashMap<String, String> results = new HashMap<>();
 
-    public Search(String url, CharSequence htmlPage) {
+    public SearchImpl(String url, CharSequence htmlPage) {
         super(url, htmlPage);
     }
 

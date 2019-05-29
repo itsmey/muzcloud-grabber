@@ -11,6 +11,7 @@ public class SimpleHttpClientImpl implements HttpClient {
     private static Logger logger = LoggerFactory.getLogger(SimpleHttpClientImpl.class);
 
     public HttpResponse get(String urlString, String contentType) {
+        logger.debug("url string {}", urlString);
         HttpURLConnection con;
         try {
             URL url = new URL(urlString);

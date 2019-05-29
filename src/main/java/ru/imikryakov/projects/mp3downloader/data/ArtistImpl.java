@@ -1,8 +1,10 @@
 package ru.imikryakov.projects.mp3downloader.data;
 
+import ru.imikryakov.projects.mp3downloader.api.Artist;
+
 import java.util.Collection;
 
-public class Artist extends HtmlEntity {
+public class ArtistImpl extends HtmlEntity implements Artist {
     private String countryCode;
     private String countryName;
     private String webPage;
@@ -11,10 +13,10 @@ public class Artist extends HtmlEntity {
     private String twitter;
     private String wikipedia;
     private byte[] photo;
-    private Collection<Album> albums;
+    private Collection<AlbumImpl> albums;
     private Collection<String> albumUrls;
 
-    public Artist(String url, CharSequence htmlPage) {
+    public ArtistImpl(String url, CharSequence htmlPage) {
         super(url, htmlPage);
     }
 
@@ -82,11 +84,11 @@ public class Artist extends HtmlEntity {
         this.photo = photo;
     }
 
-    public Collection<Album> getAlbums() {
+    public Collection<AlbumImpl> getAlbums() {
         return albums;
     }
 
-    public void setAlbums(Collection<Album> albums) {
+    public void setAlbums(Collection<AlbumImpl> albums) {
         this.albums = albums;
     }
 
