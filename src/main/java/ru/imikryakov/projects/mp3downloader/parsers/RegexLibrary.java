@@ -15,4 +15,7 @@ public interface RegexLibrary {
     String SONG_ARTIST_REGEX = "<meta content=\"\\/artist\\/.*\" itemprop=\"url\" \\/>\n<meta content=\"(.*)\" itemprop=\"name\" \\/>\\n(.*)";
     String SONG_ALBUM_REGEX = "<meta content=\"\\/album\\/.*\" itemprop=\"url\" \\/>\n<meta content=\"(.*)\" itemprop=\"name\" \\/>\n(.*)\n<\\/a>";
     String SONG_DOWNLOAD_LINK_REGEX = "<a itemprop=\"audio\" download=\".*\" href=\"(.*?)\"";
+
+    String SEARCH_ARTISTS_REGEX = "<a href=\"(\\/artist\\/.*)\">(.*)<\\/a>";
 }
+

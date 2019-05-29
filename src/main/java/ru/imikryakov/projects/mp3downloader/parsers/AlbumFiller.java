@@ -48,7 +48,7 @@ public class AlbumFiller implements Filler<Album> {
         }
 
         Grabber<Collection<String>> songsGrabber = new RegexMultiValueGrabber(RegexLibrary.ALBUM_SONGS_REGEX, 1);
-        Set<String> songUrls = new HashSet<>(songsGrabber .grab(html));
+        Set<String> songUrls = new HashSet<>(songsGrabber.grab(html));
         logger.debug(songUrls.toString());
         logger.debug("grabbed {} song urls", songUrls.size());
         album.setSongUrls(songUrls);

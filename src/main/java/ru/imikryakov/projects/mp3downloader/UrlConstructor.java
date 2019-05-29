@@ -1,5 +1,8 @@
 package ru.imikryakov.projects.mp3downloader;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class UrlConstructor {
     private static final String SITE_URL = Config.getConfigProperty("site.url");
 
@@ -21,5 +24,13 @@ public class UrlConstructor {
 
     public static String getSongDownloadUrl(String linkRelativePath) {
         return SITE_URL + linkRelativePath;
+    }
+
+    public static String getSearchUrl(String searchText) {
+        try {
+            return SITE_URL + "/search?searchText=" + URLEncoder.encode(searchText, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("unsupported encoding", e);
+        }
     }
 }
