@@ -18,4 +18,8 @@ public class UrlConstructor {
     public static String getSongPageUrl(String songRelativePath) {
         return SITE_URL + songRelativePath;
     }
+
+    public static String getSongDownloadUrl(String linkRelativePath) {
+        return SITE_URL + linkRelativePath;
+    }
 }

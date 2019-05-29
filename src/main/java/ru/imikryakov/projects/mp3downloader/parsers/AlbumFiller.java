@@ -18,23 +18,25 @@ public class AlbumFiller implements Filler<Album> {
     public Album fill(String relativeUrlPath) {
         String url = UrlConstructor.getAlbumPageUrl(relativeUrlPath);
 
-        HttpResponse response = HttpClientManager.getHttpClient().get(url);
+        HttpResponse response = HttpClientManager.getHttpClient().getHtmlPage(url);
         if (!response.isOk()) {
             return null;
         }
 
-        Album album = new Album(url, response.getData());
+        StringBuilder html = response.asHtmlPage();
+
+        Album album = new Album(url, html);
 
         Grabber<String> titleGrabber = new RegexSingleValueGrabber(RegexLibrary.ALBUM_TITLE_REGEX, 1);
-        String title = titleGrabber.grab(response.getData());
+        String title = titleGrabber.grab(html);
         logger.debug("grabbed album title: {}", title);
 
         Grabber<String> artistNameGrabber = new RegexSingleValueGrabber(RegexLibrary.ALBUM_ARTIST_REGEX, 2);
-        String artistName = artistNameGrabber.grab(response.getData());
+        String artistName = artistNameGrabber.grab(html);
         logger.debug("grabbed album artist: {}", artistName);
 
         Grabber<String> yearGrabber = new RegexSingleValueGrabber(RegexLibrary.ALBUM_YEAR_REGEX, 2);
-        String yearStr = yearGrabber.grab(response.getData());
+        String yearStr = yearGrabber.grab(html);
         logger.debug("grabbed album year: {}", yearStr);
 
         album.setTitle(title);
@@ -46,7 +48,7 @@ public class AlbumFiller implements Filler<Album> {
         }
 
         Grabber<Collection<String>> songsGrabber = new RegexMultiValueGrabber(RegexLibrary.ALBUM_SONGS_REGEX, 1);
-        Set<String> songUrls = new HashSet<>(songsGrabber .grab(response.getData()));
+        Set<String> songUrls = new HashSet<>(songsGrabber .grab(html));
         logger.debug(songUrls.toString());
         logger.debug("grabbed {} song urls", songUrls.size());
         album.setSongUrls(songUrls);

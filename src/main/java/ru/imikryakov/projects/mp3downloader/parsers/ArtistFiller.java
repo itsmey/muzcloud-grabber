@@ -19,23 +19,25 @@ public class ArtistFiller implements Filler<Artist> {
     public Artist fill(String relativeUrlPath) {
         String url = UrlConstructor.getAlbumPageUrl(relativeUrlPath);
 
-        HttpResponse response = HttpClientManager.getHttpClient().get(url);
+        HttpResponse response = HttpClientManager.getHttpClient().getHtmlPage(url);
         if (!response.isOk()) {
             return null;
         }
 
-        Artist artist = new Artist(url, response.getData());
+        StringBuilder html = response.asHtmlPage();
+
+        Artist artist = new Artist(url, html);
 
         Grabber<String> titleGrabber = new RegexSingleValueGrabber(RegexLibrary.ARTIST_TITLE_REGEX, 1);
-        String title = titleGrabber.grab(response.getData());
+        String title = titleGrabber.grab(html);
         logger.debug("grabbed artist title: {}", title);
 
         Grabber<String> contryCodeGrabber = new RegexSingleValueGrabber(RegexLibrary.ARTIST_COUNTRY_CODE_REGEX, 1);
-        String countryCode = contryCodeGrabber.grab(response.getData());
+        String countryCode = contryCodeGrabber.grab(html);
         logger.debug("grabbed artist country code: {}", countryCode);
 
         Grabber<String> countryNameGrabber = new RegexSingleValueGrabber(RegexLibrary.ARTIST_COUNTRY_NAME_REGEX, 2);
-        String countryName = countryNameGrabber.grab(response.getData());
+        String countryName = countryNameGrabber.grab(html);
         logger.debug("grabbed artist country name: {}", countryName);
 
         artist.setTitle(title);
@@ -43,10 +45,11 @@ public class ArtistFiller implements Filler<Artist> {
         artist.setCountryName(countryName);
 
         String albumsUrl = UrlConstructor.getArtistAlbumsPageUrl(relativeUrlPath);
-        response = HttpClientManager.getHttpClient().get(albumsUrl);
+        response = HttpClientManager.getHttpClient().getHtmlPage(albumsUrl);
+        html = response.asHtmlPage();
         if (response.isOk()) {
             Grabber<Collection<String>> albumsGrabber = new RegexMultiValueGrabber(RegexLibrary.ARTIST_ALBUMS_REGEX, 1);
-            Set<String> albumUrls = new HashSet<>(albumsGrabber.grab(response.getData()));
+            Set<String> albumUrls = new HashSet<>(albumsGrabber.grab(html));
             logger.debug(albumUrls.toString());
             logger.debug("grabbed {} album urls", albumUrls.size());
             artist.setAlbumUrls(albumUrls);

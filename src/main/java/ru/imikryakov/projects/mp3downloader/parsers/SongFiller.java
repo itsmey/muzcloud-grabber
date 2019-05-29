@@ -14,27 +14,29 @@ public class SongFiller implements Filler<Song> {
     public Song fill(String relativeUrlPath) {
         String url = UrlConstructor.getSongPageUrl(relativeUrlPath);
 
-        HttpResponse response = HttpClientManager.getHttpClient().get(url);
+        HttpResponse response = HttpClientManager.getHttpClient().getHtmlPage(url);
         if (!response.isOk()) {
             return null;
         }
 
-        Song song = new Song(url, response.getData());
+        StringBuilder html = response.asHtmlPage();
+
+        Song song = new Song(url, response.asHtmlPage());
 
         Grabber<String> titleGrabber = new RegexSingleValueGrabber(RegexLibrary.SONG_TITLE_REGEX, 1);
-        String title = titleGrabber.grab(response.getData());
+        String title = titleGrabber.grab(html);
         logger.debug("grabbed song title: {}", title);
 
         Grabber<String> artistNameGrabber = new RegexSingleValueGrabber(RegexLibrary.SONG_ARTIST_REGEX, 2);
-        String artistName = artistNameGrabber.grab(response.getData());
+        String artistName = artistNameGrabber.grab(html);
         logger.debug("grabbed song artist: {}", artistName);
 
         Grabber<String> albumNameGrabber = new RegexSingleValueGrabber(RegexLibrary.SONG_ALBUM_REGEX, 2);
-        String albumName = albumNameGrabber.grab(response.getData());
+        String albumName = albumNameGrabber.grab(html);
         logger.debug("grabbed song album: {}", albumName);
 
         Grabber<String> linkGrabber = new RegexSingleValueGrabber(RegexLibrary.SONG_DOWNLOAD_LINK_REGEX, 1);
-        String link = linkGrabber.grab(response.getData());
+        String link = linkGrabber.grab(html);
         logger.debug("grabbed song download link: {}", link);
 
         song.setTitle(title);
