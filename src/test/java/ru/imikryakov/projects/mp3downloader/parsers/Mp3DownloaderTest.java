@@ -7,18 +7,16 @@ import ru.imikryakov.projects.mp3downloader.api.Album;
 import ru.imikryakov.projects.mp3downloader.api.Artist;
 import ru.imikryakov.projects.mp3downloader.api.Search;
 import ru.imikryakov.projects.mp3downloader.api.Song;
-import ru.imikryakov.projects.mp3downloader.http.HttpResponse;
 import ru.imikryakov.projects.mp3downloader.http.SimpleHttpClientImpl;
 import ru.imikryakov.projects.mp3downloader.parsers.ru.imikryakov.projects.mp3downloader.TestData;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class Mp3DownloaderTest {
 
     @Test
     public void testSiteAccessibility() {
-        HttpResponse response = new SimpleHttpClientImpl().getHtmlPage(TestData.getArtistPageUrl());
+        StringBuilder response = new SimpleHttpClientImpl().getHtmlPage(TestData.getArtistPageUrl());
         assertNotNull(response);
     }
 
@@ -53,7 +51,7 @@ public class Mp3DownloaderTest {
         assertNotNull(song);
 //        assertTrue(song.isFilled());
         assertNotNull(song.getDownloadLink());
-        new SimpleHttpClientImpl().getHtmlPage(song.getDownloadLink()).asFile("");
+        new SimpleHttpClientImpl().getHtmlPage(song.getDownloadLink());
     }
 
     @Test
@@ -66,6 +64,6 @@ public class Mp3DownloaderTest {
     public void testDownloadAlbum() {
         Album album = new AlbumFiller().fill(TestData.getAlbumPageRelativeUrl());
         assertNotNull(album);
-        new Mp3DownloaderImpl().downloadAlbum(album, "", true);
+        new Mp3DownloaderImpl().downloadAlbum(album, "", true, true);
     }
 }

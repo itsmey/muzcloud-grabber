@@ -21,6 +21,9 @@ import java.util.Map;
 public class Mp3DownloaderImpl implements Mp3Downloader {
     private static Logger logger = LoggerFactory.getLogger(Mp3DownloaderImpl.class);
 
+    private int songDownloadRetryCount = Integer.valueOf(Config.getConfigProperty("download.retry.count"));
+    private final int WAIT_TIME_BEFORE_RETRY = Integer.valueOf(Config.getConfigProperty("download.retry.wait.time"));
+
     private Filler<Album> albumFiller = new AlbumFiller();
     private Filler<Artist> artistFiller = new ArtistFiller();
     private Filler<Song> songFiller = new SongFiller();
@@ -47,7 +50,7 @@ public class Mp3DownloaderImpl implements Mp3Downloader {
     }
 
     @Override
-    public void downloadAlbum(Album album, String parentDir, boolean canRenameFiles) {
+    public Collection<DownloadReport> downloadAlbum(Album album, String parentDir, boolean canRenameFiles, boolean exitAtFirstFail) {
         String folderName = String.format("%s %s - %s", album.getArtistName(), album.getYear() == 0 ? "" : " - (" + album.getYear() + ")", album.getTitle());
 
         File albumDir = Utils.combinePaths(parentDir, folderName);
@@ -61,18 +64,65 @@ public class Mp3DownloaderImpl implements Mp3Downloader {
 
         logger.debug("album folder is {}", albumDir.getPath());
 
+        Map<String, DownloadReport> reports = new HashMap<>();
+        for (String songUrl : album.getSongUrls()) {
+            reports.put(songUrl, new DownloadReport(songUrl));
+        }
+
         Collection<String> fileNames = new ArrayList<>();
 
         SongFiller songFiller = new SongFiller();
         for (String songUrl : album.getSongUrls()) {
             Song song = songFiller.fill(songUrl);
+            reports.get(songUrl).setFileName(song.getTitle());
             logger.debug("downloading song {}", song.getTitle());
-            fileNames.add(song.download(albumDir.getPath()));
-            logger.debug("downloaded");
+            try {
+                fileNames.add(downloadSong(song, albumDir.getPath()));
+                reports.get(songUrl).setStatus(DownloadReport.Status.SUCCESS);
+                logger.debug("downloaded");
+            } catch (Mp3DownloaderException e) {
+                reports.get(songUrl).setStatus(DownloadReport.Status.ERROR);
+                reports.get(songUrl).setErrorMsg(e.getMessage());
+                if (exitAtFirstFail) {
+                    logger.debug("exiting at first song download fail");
+                    return reports.values();
+                }
+            }
+
+            songDownloadRetryCount = Integer.valueOf(Config.getConfigProperty("download.retry.count"));
         }
 
         if (canRenameFiles) {
              renameFiles(fileNames);
+        }
+
+        return reports.values();
+    }
+
+    private String downloadSong(Song song, String path) {
+        try {
+            return song.download(path);
+        } catch (Mp3DownloaderException e) {
+            logger.debug("can't download song: exception {}", e.getMessage());
+            if (songDownloadRetryCount > 0) {
+                songDownloadRetryCount--;
+                logger.debug("retry download. {} retries remains", songDownloadRetryCount);
+                if (WAIT_TIME_BEFORE_RETRY > 0) {
+                    logger.debug("wait {} milliseconds before retry", WAIT_TIME_BEFORE_RETRY);
+                    sleep(WAIT_TIME_BEFORE_RETRY);
+                }
+                return downloadSong(song, path);
+            } else {
+                throw new Mp3DownloaderException(e.getMessage(), e);
+            }
+        }
+    }
+
+    private void sleep(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            logger.debug("interrupted while waiting for retry");
         }
     }
 
@@ -107,7 +157,6 @@ public class Mp3DownloaderImpl implements Mp3Downloader {
                 logger.debug("renaming {} to {}", path.getFileName().toString(), newName);
                 Files.move(path, path.resolveSibling(newName));
             }
-
         } catch (Exception e) {
             logger.error("exception occurred. postprocessing cancelled.", e);
         }

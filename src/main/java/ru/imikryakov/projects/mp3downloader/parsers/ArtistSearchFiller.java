@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import ru.imikryakov.projects.mp3downloader.api.Search;
 import ru.imikryakov.projects.mp3downloader.data.SearchImpl;
 import ru.imikryakov.projects.mp3downloader.http.HttpClientManager;
-import ru.imikryakov.projects.mp3downloader.http.HttpResponse;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,12 +16,7 @@ public class ArtistSearchFiller implements Filler<Search> {
 
     @Override
     public Search fill(String url) {
-        HttpResponse response = HttpClientManager.getHttpClient().getHtmlPage(url);
-        if (!response.isOk()) {
-            return null;
-        }
-
-        StringBuilder html = response.asHtmlPage();
+        StringBuilder html = HttpClientManager.getHttpClient().getHtmlPage(url);
 
         SearchImpl search = new SearchImpl(url, html);
 

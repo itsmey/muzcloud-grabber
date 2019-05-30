@@ -6,7 +6,6 @@ import ru.imikryakov.projects.mp3downloader.helpers.UrlConstructor;
 import ru.imikryakov.projects.mp3downloader.api.Artist;
 import ru.imikryakov.projects.mp3downloader.data.ArtistImpl;
 import ru.imikryakov.projects.mp3downloader.http.HttpClientManager;
-import ru.imikryakov.projects.mp3downloader.http.HttpResponse;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,12 +18,7 @@ public class ArtistFiller implements Filler<Artist> {
     public Artist fill(String relativeUrlPath) {
         String url = UrlConstructor.getAlbumPageUrl(relativeUrlPath);
 
-        HttpResponse response = HttpClientManager.getHttpClient().getHtmlPage(url);
-        if (!response.isOk()) {
-            return null;
-        }
-
-        StringBuilder html = response.asHtmlPage();
+        StringBuilder html = HttpClientManager.getHttpClient().getHtmlPage(url);
 
         ArtistImpl artist = new ArtistImpl(url, html);
 
@@ -45,15 +39,12 @@ public class ArtistFiller implements Filler<Artist> {
         artist.setCountryName(countryName);
 
         String albumsUrl = UrlConstructor.getArtistAlbumsPageUrl(relativeUrlPath);
-        response = HttpClientManager.getHttpClient().getHtmlPage(albumsUrl);
-        html = response.asHtmlPage();
-        if (response.isOk()) {
-            Grabber<Collection<String>> albumsGrabber = new RegexMultiValueGrabber(RegexLibrary.ARTIST_ALBUMS_REGEX, 1);
-            Set<String> albumUrls = new HashSet<>(albumsGrabber.grab(html));
-            logger.debug(albumUrls.toString());
-            logger.debug("grabbed {} album urls", albumUrls.size());
-            artist.setAlbumUrls(albumUrls);
-        }
+        html = HttpClientManager.getHttpClient().getHtmlPage(albumsUrl);
+        Grabber<Collection<String>> albumsGrabber = new RegexMultiValueGrabber(RegexLibrary.ARTIST_ALBUMS_REGEX, 1);
+        Set<String> albumUrls = new HashSet<>(albumsGrabber.grab(html));
+        logger.debug(albumUrls.toString());
+        logger.debug("grabbed {} album urls", albumUrls.size());
+        artist.setAlbumUrls(albumUrls);
 
         artist.setFilled(true);
         return artist;

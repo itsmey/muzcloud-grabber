@@ -6,7 +6,6 @@ import ru.imikryakov.projects.mp3downloader.helpers.UrlConstructor;
 import ru.imikryakov.projects.mp3downloader.api.Album;
 import ru.imikryakov.projects.mp3downloader.data.AlbumImpl;
 import ru.imikryakov.projects.mp3downloader.http.HttpClientManager;
-import ru.imikryakov.projects.mp3downloader.http.HttpResponse;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,12 +18,7 @@ public class AlbumFiller implements Filler<Album> {
     public Album fill(String relativeUrlPath) {
         String url = UrlConstructor.getAlbumPageUrl(relativeUrlPath);
 
-        HttpResponse response = HttpClientManager.getHttpClient().getHtmlPage(url);
-        if (!response.isOk()) {
-            return null;
-        }
-
-        StringBuilder html = response.asHtmlPage();
+        StringBuilder html = HttpClientManager.getHttpClient().getHtmlPage(url);
 
         AlbumImpl album = new AlbumImpl(url, html);
 

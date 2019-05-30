@@ -6,7 +6,6 @@ import ru.imikryakov.projects.mp3downloader.helpers.UrlConstructor;
 import ru.imikryakov.projects.mp3downloader.api.Song;
 import ru.imikryakov.projects.mp3downloader.data.SongImpl;
 import ru.imikryakov.projects.mp3downloader.http.HttpClientManager;
-import ru.imikryakov.projects.mp3downloader.http.HttpResponse;
 
 public class SongFiller implements Filler<Song> {
     private static Logger logger = LoggerFactory.getLogger(SongFiller.class);
@@ -15,12 +14,7 @@ public class SongFiller implements Filler<Song> {
     public Song fill(String relativeUrlPath) {
         String url = UrlConstructor.getSongPageUrl(relativeUrlPath);
 
-        HttpResponse response = HttpClientManager.getHttpClient().getHtmlPage(url);
-        if (!response.isOk()) {
-            return null;
-        }
-
-        StringBuilder html = response.asHtmlPage();
+        StringBuilder html = HttpClientManager.getHttpClient().getHtmlPage(url);
 
         SongImpl song = new SongImpl(url, html);
 

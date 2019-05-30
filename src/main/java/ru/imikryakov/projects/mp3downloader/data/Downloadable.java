@@ -6,6 +6,6 @@ public interface Downloadable {
     String getDownloadLink();
 
     default String download(String directory) {
-        return HttpClientManager.getHttpClient().get(getDownloadLink()).asFile(directory);
+        return HttpClientManager.getHttpClient().getFile(getDownloadLink(), directory);
     }
 }
