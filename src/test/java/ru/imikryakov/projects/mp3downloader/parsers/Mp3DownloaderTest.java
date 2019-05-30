@@ -66,6 +66,6 @@ public class Mp3DownloaderTest {
     public void testDownloadAlbum() {
         Album album = new AlbumFiller().fill(TestData.getAlbumPageRelativeUrl());
         assertNotNull(album);
-        new Mp3DownloaderImpl().downloadAlbum(album, "");
+        new Mp3DownloaderImpl().downloadAlbum(album, "", true);
     }
 }

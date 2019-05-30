@@ -46,7 +46,7 @@ public interface HttpResponse {
         }
     }
 
-    default void asFile(String directory) {
+    default String asFile(String directory) {
         logger.debug("saving HTML Response data to file: {}", getUrl());
         try (InputStream is = getData()) {
             String filename = Paths.get(new URI(getUrl()).getPath()).getFileName().toString();
@@ -61,9 +61,11 @@ public interface HttpResponse {
                     outputStream.write(bytes, 0, read);
                 }
             }
+            return outputFile.getPath();
 
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage(), e);
+            return null;
         } finally {
             closeConnection();
         }

@@ -5,5 +5,5 @@ public interface Mp3Downloader {
     Artist getArtist(String relativeUrl);
     Album getAlbum(String relativeUrl);
     Song getSong(String relativeUrl);
-    void downloadAlbum(Album album, String parentDir);
+    void downloadAlbum(Album album, String parentDir, boolean canRenameFiles);
 }
