@@ -119,14 +119,24 @@ public class Mp3DownloaderImpl implements Mp3Downloader {
             ID3v2 tag = mp3.getId3v2Tag();
             track = tag.getTrack();
             if (track != null && !track.trim().isEmpty()) {
-                return track;
+                try {
+                    Integer.valueOf(track);
+                    return track;
+                } catch (NumberFormatException e) {
+                    logger.debug("idv2 incorrect track number {}", track);
+                }
             }
         }
         if (mp3.hasId3v1Tag()) {
             ID3v1 tag = mp3.getId3v1Tag();
             track = tag.getTrack();
             if (track != null && !track.trim().isEmpty()) {
-                return track;
+                try {
+                    Integer.valueOf(track);
+                    return track;
+                } catch (NumberFormatException e) {
+                    logger.debug("idv1 incorrect track number {}", track);
+                }
             }
         }
         return null;
