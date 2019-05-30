@@ -8,12 +8,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-class Config {
+public class Config {
     private static Logger logger = LoggerFactory.getLogger(Config.class);
 
     private static URL configFile = Config.class.getClassLoader().getResource("config.properties");
 
-    static String getConfigProperty(String propName) {
+    public static String getConfigProperty(String propName) {
         if (configFile == null) {
             logger.error("config file not found for property " + propName);
             throw new IllegalStateException("config file not found for property " + propName);

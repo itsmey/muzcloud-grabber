@@ -2,6 +2,7 @@ package ru.imikryakov.projects.mp3downloader.http;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.imikryakov.projects.mp3downloader.helpers.Utils;
 
 import java.io.*;
 import java.net.URI;
@@ -51,12 +52,7 @@ public interface HttpResponse {
             String filename = Paths.get(new URI(getUrl()).getPath()).getFileName().toString();
             logger.debug("file name for saving file is {}", filename);
 
-            File outputFile;
-            if (directory == null || directory.trim().isEmpty()) {
-                outputFile = new File(filename);
-            } else {
-                outputFile = new File(directory, filename);
-            }
+            File outputFile = Utils.combinePaths(directory, filename);
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
                 int read;
                 byte[] bytes = new byte[1024];

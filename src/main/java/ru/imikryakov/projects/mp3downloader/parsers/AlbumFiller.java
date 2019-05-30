@@ -2,7 +2,7 @@ package ru.imikryakov.projects.mp3downloader.parsers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.imikryakov.projects.mp3downloader.UrlConstructor;
+import ru.imikryakov.projects.mp3downloader.helpers.UrlConstructor;
 import ru.imikryakov.projects.mp3downloader.api.Album;
 import ru.imikryakov.projects.mp3downloader.data.AlbumImpl;
 import ru.imikryakov.projects.mp3downloader.http.HttpClientManager;

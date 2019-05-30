@@ -1,4 +1,6 @@
-package ru.imikryakov.projects.mp3downloader;
+package ru.imikryakov.projects.mp3downloader.helpers;
+
+import ru.imikryakov.projects.mp3downloader.Config;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

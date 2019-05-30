@@ -1,6 +1,6 @@
 package ru.imikryakov.projects.mp3downloader.parsers.ru.imikryakov.projects.mp3downloader;
 
-import ru.imikryakov.projects.mp3downloader.UrlConstructor;
+import ru.imikryakov.projects.mp3downloader.helpers.UrlConstructor;
 
 import java.util.HashMap;
 

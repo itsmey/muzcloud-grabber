@@ -3,6 +3,7 @@ package ru.imikryakov.projects.mp3downloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.imikryakov.projects.mp3downloader.api.*;
+import ru.imikryakov.projects.mp3downloader.helpers.Utils;
 import ru.imikryakov.projects.mp3downloader.parsers.*;
 
 import java.io.File;
@@ -39,12 +40,7 @@ public class Mp3DownloaderImpl implements Mp3Downloader {
     public void downloadAlbum(Album album, String parentDir) {
         String folderName = String.format("%s %s - %s", album.getArtistName(), album.getYear() == 0 ? "" : " - (" + album.getYear() + ")", album.getTitle());
 
-        File albumDir;
-        if (parentDir == null || parentDir.trim().isEmpty()) {
-            albumDir = new File(folderName);
-        } else {
-            albumDir = new File(parentDir, folderName);
-        }
+        File albumDir = Utils.combinePaths(parentDir, folderName);
 
         if (!albumDir.exists()) {
             if (!albumDir.mkdir()) {

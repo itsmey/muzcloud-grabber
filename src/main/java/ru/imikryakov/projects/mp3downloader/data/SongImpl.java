@@ -1,6 +1,6 @@
 package ru.imikryakov.projects.mp3downloader.data;
 
-import ru.imikryakov.projects.mp3downloader.UrlConstructor;
+import ru.imikryakov.projects.mp3downloader.helpers.UrlConstructor;
 import ru.imikryakov.projects.mp3downloader.api.Song;
 
 public class SongImpl extends HtmlEntity implements Song {
