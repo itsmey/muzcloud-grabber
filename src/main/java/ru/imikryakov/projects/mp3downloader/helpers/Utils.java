@@ -12,6 +12,6 @@ public class Utils {
     }
 
     public static String prepareFileName(String name) {
-        return name.replaceAll("[\\\\\\/:?*\"<>|+.]", "").trim();
+        return name.replaceAll("[\\\\\\/:?*\"<>|+]", "").trim();
     }
 }
