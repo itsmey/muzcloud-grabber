@@ -154,6 +154,7 @@ public class Mp3DownloaderImpl implements Mp3Downloader {
             for (String fileName : fileNames) {
                 Path path = Paths.get(fileName);
                 String newName = String.format("%02d-%s.mp3", Integer.valueOf(tracks.get(fileName)), titles.get(fileName));
+                newName = Utils.prepareFileName(newName);
                 logger.debug("renaming {} to {}", path.getFileName().toString(), newName);
                 Files.move(path, path.resolveSibling(newName));
             }

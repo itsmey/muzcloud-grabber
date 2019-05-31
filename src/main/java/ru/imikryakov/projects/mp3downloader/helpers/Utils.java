@@ -10,4 +10,8 @@ public class Utils {
             return new File(parentDir, path);
         }
     }
+
+    public static String prepareFileName(String name) {
+        return name.replaceAll("\\?", "");
+    }
 }

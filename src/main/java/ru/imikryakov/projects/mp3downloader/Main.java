@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         Mp3Downloader downloader = new Mp3DownloaderImpl();
-        Album album = downloader.getAlbum("/album/1122714/johnny-cash-the-essential-collection-cd2-2012");
+        Album album = downloader.getAlbum("/album/3155365/the-shirelles-25-all-time-greatest-hits-60s-1999");
         logger.debug(DownloadReport.formReportText(new Mp3DownloaderImpl().downloadAlbum(album, "", true, true)).toString());
     }
 
